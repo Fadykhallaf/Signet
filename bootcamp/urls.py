@@ -9,8 +9,10 @@ from bootcamp.activities import views as activities_views
 from bootcamp.authentication import views as bootcamp_auth_views
 from bootcamp.core import views as core_views
 from bootcamp.search import views as search_views
+from django.contrib import admin
 
 urlpatterns = [
+    url(r'^admin/', admin.site.urls),
     url(r'^$', core_views.home, name='home'),
     url(r'^login', auth_views.login, {'template_name': 'core/cover.html'},
         name='login'),
