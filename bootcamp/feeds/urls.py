@@ -4,6 +4,12 @@ from bootcamp.feeds import views
 
 urlpatterns = [
     url(r'^$', views.feeds, name='feeds'),
+    url(r'^api/comments/', views.FeedCommentsListAPIVIEW.as_view(), name='list'),
+    url(r'^api/', views.FeedListAPIView.as_view(), name='list'),
+    url(r'^create/', views.FeedCreateAPIView.as_view(), name='create'),
+    url(r'^(?P<pk>\d+)/$', views.FeedDetailAPIView.as_view(), name='detail'),
+    url(r'^(?P<pk>\d+)/edit/$', views.FeedUpdateAPIView.as_view(), name='update'),
+    url(r'^(?P<pk>\d+)/delete/$', views.FeedDeleteAPIView.as_view(), name='delete'),
     url(r'^post/$', views.post, name='post'),
     url(r'^like/$', views.like, name='like'),
     url(r'^comment/$', views.comment, name='comment'),

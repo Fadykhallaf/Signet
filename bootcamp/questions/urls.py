@@ -4,6 +4,9 @@ from bootcamp.questions import views
 
 urlpatterns = [
     url(r'^$', views.questions, name='questions'),
+    url(r'^Qlist/', views.QuestionListAPIVIEW.as_view(), name='list'),
+    url(r'^answer/list/', views.AnswerListAPIVIEW.as_view(), name='list'),
+    url(r'^(?P<pk>\d+)/', views.AnswerDetailAPIView.as_view(), name='Detail'),
     url(r'^answered/$', views.answered, name='answered'),
     url(r'^unanswered/$', views.unanswered, name='unanswered'),
     url(r'^all/$', views.all, name='all'),

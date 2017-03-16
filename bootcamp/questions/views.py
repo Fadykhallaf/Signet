@@ -3,6 +3,13 @@ from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import Q
 from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, redirect, render
+from rest_framework import filters
+
+from .serializers import QuestionSerializer, AnswerSerializer
+from rest_framework.generics import RetrieveAPIView, ListAPIView, UpdateAPIView, DestroyAPIView
+from rest_framework.filters import (SearchFilter,
+                                    OrderingFilter,
+                                    )
 
 from bootcamp.activities.models import Activity
 from bootcamp.decorators import ajax_required
@@ -163,3 +170,21 @@ def favorite(request):
         user.profile.notify_favorited(question)
 
     return HttpResponse(question.calculate_favorites())
+
+
+class QuestionListAPIVIEW(ListAPIView):
+    queryset = Question.objects.all()
+    serializer_class = QuestionSerializer
+
+
+class AnswerListAPIVIEW(ListAPIView):
+    queryset = Answer.objects.all()
+    serializer_class = AnswerSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_fields = ('question',)
+
+
+class AnswerDetailAPIView(RetrieveAPIView):
+    queryset = Answer.objects.all()
+    serializer_class = AnswerSerializer
+    # lookup_field = ['question']

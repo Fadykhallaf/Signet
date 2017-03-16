@@ -1,5 +1,6 @@
 import json
 
+import django_filters
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.http import (HttpResponse, HttpResponseBadRequest,
@@ -7,6 +8,30 @@ from django.http import (HttpResponse, HttpResponseBadRequest,
 from django.shortcuts import get_object_or_404, render
 from django.template.context_processors import csrf
 from django.template.loader import render_to_string
+from rest_framework.generics import (ListAPIView,
+                                     RetrieveAPIView,
+                                     UpdateAPIView,
+                                     DestroyAPIView,
+                                     CreateAPIView,
+                                     RetrieveUpdateAPIView
+                                     )
+
+from rest_framework.pagination import (
+                                        LimitOffsetPagination,
+                                        PageNumberPagination
+)
+from .permission import IsOwnerOrReadOnly
+from rest_framework.filters import (SearchFilter,
+                                    OrderingFilter,
+                                    )
+from rest_framework.permissions import (AllowAny,
+                                        IsAuthenticated,
+                                        IsAdminUser,
+                                        IsAuthenticatedOrReadOnly,
+                                        )
+from rest_framework import filters
+
+from .serializers import FeedSerializer
 
 from bootcamp.activities.models import Activity
 from bootcamp.decorators import ajax_required
@@ -27,7 +52,7 @@ def feeds(request):
         'feeds': feeds,
         'from_feed': from_feed,
         'page': 1,
-        })
+    })
 
 
 def feed(request, pk):
@@ -60,7 +85,7 @@ def load(request):
                                                     'feed': feed,
                                                     'user': request.user,
                                                     'csrf_token': csrf_token
-                                                    }))
+                                                }))
 
     return HttpResponse(html)
 
@@ -77,7 +102,7 @@ def _html_feeds(last_feed, user, csrf_token, feed_source='all'):
                                                     'feed': feed,
                                                     'user': user,
                                                     'csrf_token': csrf_token
-                                                    }))
+                                                }))
 
     return html
 
@@ -208,3 +233,46 @@ def remove(request):
             return HttpResponseForbidden()
     except Exception:
         return HttpResponseBadRequest()
+
+
+class FeedCommentsListAPIVIEW(ListAPIView):
+    queryset = Feed.objects.all()
+    serializer_class = FeedSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_fields = ('parent',)
+
+
+class FeedListAPIView(ListAPIView):
+    queryset = Feed.objects.filter(parent__isnull=True)
+    serializer_class = FeedSerializer
+    pagination_class = LimitOffsetPagination
+    permission_classes = [IsAuthenticated]
+
+
+class FeedDetailAPIView(RetrieveAPIView):
+    queryset = Feed.objects.all()
+    serializer_class = FeedSerializer
+
+
+class FeedUpdateAPIView(RetrieveUpdateAPIView):
+    queryset = Feed.objects.all()
+    serializer_class = FeedSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+
+class FeedDeleteAPIView(DestroyAPIView):
+    queryset = Feed.objects.all()
+    serializer_class = FeedSerializer
+    # lookup_field = 'post'
+
+
+class FeedCreateAPIView(CreateAPIView):
+    queryset = Feed.objects.all()
+    serializer_class = FeedSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
