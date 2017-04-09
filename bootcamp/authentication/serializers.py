@@ -1,9 +1,11 @@
 from django.contrib.auth import get_user_model
 from django.db.models import Q
+from .models import Profile
 from rest_framework.exceptions import ValidationError
 from rest_framework.serializers import (ModelSerializer,
                                         EmailField,
                                         CharField,
+                                        URLField
                                         )
 
 User = get_user_model()
@@ -80,3 +82,16 @@ class UserLoginSerializer(ModelSerializer):
                 raise ValidationError("Incorrect Credential please try again")
         data["token"] = "SOME RANDOM TOKEN"
         return data
+
+
+class UserProfileSerializer(ModelSerializer):
+    picture = URLField(source='get_picture', read_only=True)
+
+    class Meta:
+        model = Profile
+        fields = [
+            'location',
+            'url',
+            'job_title',
+            'picture'
+        ]

@@ -5,6 +5,10 @@ from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.html import escape
 from django.utils.translation import ugettext_lazy as _
+import hashlib
+import os
+import urllib
+from django.conf import settings
 
 import bleach
 from bootcamp.activities.models import Activity
@@ -76,3 +80,22 @@ class Feed(models.Model):
 
     def linkfy_post(self):
         return bleach.linkify(escape(self.post))
+
+    def get_picture(self):
+        no_picture = 'http://trybootcamp.vitorfs.com/static/img/user.png'
+        try:
+            filename = settings.MEDIA_ROOT + '/profile_pictures/' + \
+                       self.user.username + '.jpg'
+            picture_url = settings.MEDIA_URL + 'profile_pictures/' + \
+                          self.user.username + '.jpg'
+            if os.path.isfile(filename):
+                return picture_url
+            else:
+                gravatar_url = 'http://www.gravatar.com/avatar/{0}?{1}'.format(
+                    hashlib.md5(self.user.email.lower()).hexdigest(),
+                    urllib.urlencode({'d': no_picture, 's': '256'})
+                )
+                return gravatar_url
+
+        except Exception:
+            return no_picture

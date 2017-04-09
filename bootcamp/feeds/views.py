@@ -13,7 +13,8 @@ from rest_framework.generics import (ListAPIView,
                                      UpdateAPIView,
                                      DestroyAPIView,
                                      CreateAPIView,
-                                     RetrieveUpdateAPIView
+                                     RetrieveUpdateAPIView,
+                                     RetrieveDestroyAPIView
                                      )
 
 from rest_framework.pagination import (
@@ -31,7 +32,7 @@ from rest_framework.permissions import (AllowAny,
                                         )
 from rest_framework import filters
 
-from .serializers import FeedSerializer
+from .serializers import FeedSerializer, FeedEditSerializer
 
 from bootcamp.activities.models import Activity
 from bootcamp.decorators import ajax_required
@@ -256,17 +257,22 @@ class FeedDetailAPIView(RetrieveAPIView):
 
 class FeedUpdateAPIView(RetrieveUpdateAPIView):
     queryset = Feed.objects.all()
-    serializer_class = FeedSerializer
+    serializer_class = FeedEditSerializer
     permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
 
-class FeedDeleteAPIView(DestroyAPIView):
+class FeedDeleteAPIView(RetrieveDestroyAPIView):
     queryset = Feed.objects.all()
     serializer_class = FeedSerializer
-    # lookup_field = 'post'
+    permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+
+    def perform_destroy(self, instance):
+        instance.delete()
+
+
 
 
 class FeedCreateAPIView(CreateAPIView):

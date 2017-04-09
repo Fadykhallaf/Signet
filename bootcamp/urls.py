@@ -13,6 +13,7 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^userList/$', bootcamp_auth_views.UserLoginAPIView.as_view(), name='login'),
     url(r'^$', core_views.home, name='home'),
     url(r'^login', auth_views.login, {'template_name': 'core/cover.html'},
         name='login'),
@@ -20,7 +21,7 @@ urlpatterns = [
     url(r'^signup/$', bootcamp_auth_views.signup, name='signup'),
     url(r'^api/auth/token', obtain_jwt_token),
     url(r'^registerapi/$', bootcamp_auth_views.UserCreateAPIView.as_view(), name='register'),
-    url(r'^userList/$', bootcamp_auth_views.UserLoginAPIView.as_view(), name='login'),
+    url(r'^user/profile/$', bootcamp_auth_views.ProfileListAPIView.as_view(), name='profile'),
     url(r'^settings/$', core_views.settings, name='settings'),
     url(r'^settings/picture/$', core_views.picture, name='picture'),
     url(r'^settings/upload_picture/$', core_views.upload_picture,
