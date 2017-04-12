@@ -7,7 +7,6 @@ $(function () {
         $("#unread-count").text(data);
       },
       complete: function () {
-          console.log('test');
         window.setTimeout(check_messages, 60000);
       }
     });

@@ -16,11 +16,11 @@ class CommunitySerializerTree(ModelSerializer):
     #color  = SerializerMethodField()
     class Meta:
         model = Community
-        fields = ['label','amount','description','children']
+        fields = ['label','amount','description','children','pk']
 
     def get_amount(self , obj):
 
-        return 87
+        return 500000
 
     def get_label(self,obj):
         return obj.name

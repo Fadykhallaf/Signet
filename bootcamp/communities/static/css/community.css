@@ -1,0 +1,34 @@
+@import url(https://fonts.googleapis.com/css?family=Audiowide);
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+:root {
+    --primary: #1446A0;
+    --secondary: #E9EBEE;
+    --secondary-dark: #0282DD;
+    --primary-dark: #394046;
+}
+body{
+    background-color: var(--secondary);
+    overflow-x: hidden;
+}
+.pickup-community .pickup-community--welcome,
+.pickup-community .pickup-community--community{
+    background-color: white;
+    margin:20px 0px ;
+    border-radius: 4px;
+    padding:15px 0px;
+}
+.pickup-community .pickup-community--welcome h2{
+    font-family: "Audiowide", cursive;
+    font-size: 40px;
+    color: var(--primary-dark);
+}
+.pickup-community .pickup-community--community h2,
+.pickup-community .pickup-community--community p,
+.pickup-community .pickup-community--welcome p {
+{
+    font-family: 'Roboto', sans-serif;
+}
+.pickup-community .pickup-community--community p{
+    max-width: 400px;
+    text-align: center;
+}
