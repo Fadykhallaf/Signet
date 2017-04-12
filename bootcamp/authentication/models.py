@@ -5,12 +5,12 @@ import os.path
 import urllib
 
 from django.conf import settings
-from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import post_save
 from django.utils.encoding import python_2_unicode_compatible
 
 from bootcamp.activities.models import Notification
+from bootcamp.communities.models import User
 
 
 @python_2_unicode_compatible
@@ -90,7 +90,7 @@ class Profile(models.Model):
         for user in users:
             Notification(notification_type=Notification.ALSO_COMMENTED,
                          from_user=self.user,
-                         to_user=User(id=user), feed=feed).save()
+                         to_user=settings.AUTH_USER_MODEL(id=user), feed=feed).save()
 
     def notify_favorited(self, question):
         if self.user != question.user:
@@ -137,5 +137,5 @@ def create_user_profile(sender, instance, created, **kwargs):
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
 
-post_save.connect(create_user_profile, sender=User)
-post_save.connect(save_user_profile, sender=User)
+post_save.connect(create_user_profile, sender=settings.AUTH_USER_MODEL)
+post_save.connect(save_user_profile, sender=settings.AUTH_USER_MODEL)

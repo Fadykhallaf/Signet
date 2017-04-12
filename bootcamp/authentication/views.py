@@ -1,5 +1,5 @@
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.models import User
+from  bootcamp.communities.models import  User
 from django.shortcuts import redirect, render
 
 from bootcamp.authentication.forms import SignUpForm
@@ -38,7 +38,7 @@ def signup(request):
                                                                 user.username)
             feed = Feed(user=user, post=welcome_post)
             feed.save()
-            return redirect('/')
+            return redirect('/community/')
 
     else:
         return render(request, 'authentication/signup.html',

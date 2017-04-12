@@ -1,12 +1,11 @@
 from __future__ import unicode_literals
 
 from datetime import datetime
-
-from django.contrib.auth.models import User
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
+from bootcamp import settings
 
 import markdown
 
@@ -24,10 +23,10 @@ class Article(models.Model):
     slug = models.SlugField(max_length=255, null=True, blank=True)
     content = models.TextField(max_length=4000)
     status = models.CharField(max_length=1, choices=STATUS, default=DRAFT)
-    create_user = models.ForeignKey(User)
+    create_user = models.ForeignKey(settings.AUTH_USER_MODEL)
     create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(blank=True, null=True)
-    update_user = models.ForeignKey(User, null=True, blank=True,
+    update_user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True,
                                     related_name="+")
 
     class Meta:
@@ -113,7 +112,7 @@ class ArticleComment(models.Model):
     article = models.ForeignKey(Article)
     comment = models.CharField(max_length=500)
     date = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
 
     class Meta:
         verbose_name = _("Article Comment")

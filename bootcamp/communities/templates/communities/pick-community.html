@@ -1,0 +1,79 @@
+{% load staticfiles %} {% load i18n %} {% block head %}
+<script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script type="text/javascript" src="{% static 'js/raphael-min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/Tween.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/bubbletree.js' %}"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'css/bubbletree.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/community.css' %}" />
+<script src="{% static 'js/community.js' %}"></script>
+{% endblock head %} {% block main %} {% endblock main %}
+
+<script>
+    $(document).ready(function() {
+        function getReady(){
+            var commList = {{ community | safe }};
+            var commParList = [];
+            for (var i = 0; i < commList.length; i++) {
+                if (commList[i].children.length != 0) {
+                    commParList.push(commList[i]);
+                }
+            }
+            community = {
+                label: "Get Intouch with your Community ",
+                amount: 900000,
+                color: "#0282DD"
+            };
+            community.children = commParList;
+        }
+        $.when(getReady()).done(function() {
+            new BubbleTree({
+                data: community,
+                container: '.bubbletree'
+            });
+        });
+
+
+
+
+
+    });
+</script>
+
+<div class="pickup-community text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="pickup-community--welcome">
+                    <h2>SIGNET</h2>
+                    <p class="lead">
+                        Special Interested Groups Network
+                    </p>
+                    <form action="{% url 'vote' %}" method="post" role="form">
+                      {% csrf_token %}
+                      {% for field in form.visible_fields %}
+                        <div>
+                           {{ field }}
+                        </div>
+                      {% endfor %}
+                      <div class="form-group">
+                        <button type="submit" class="btn btn-primary publish">{% trans 'Get Started' %}</button>
+                      </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="pickup-community--community">
+                        <h2 id="community-id">PickUp Community to Join:</h2>
+                        <p id="community-desc">
+
+                        </p>
+                    <div class="bubbletree"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

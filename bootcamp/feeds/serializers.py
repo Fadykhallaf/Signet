@@ -5,10 +5,12 @@ import urllib
 from rest_framework.serializers import ModelSerializer, SerializerMethodField, URLField, IntegerField
 from django.conf import settings
 
-from .models import Feed, User
+from .models import Feed
+from bootcamp.communities.models import User
 
 
 class FeedSerializer(ModelSerializer):
+    user = User()
     username = SerializerMethodField()
     picture = URLField(source='get_picture', read_only=True)
 

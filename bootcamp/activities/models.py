@@ -1,9 +1,8 @@
 from __future__ import unicode_literals
-
-from django.contrib.auth.models import User
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.html import escape
+from bootcamp import settings
 
 
 @python_2_unicode_compatible
@@ -19,7 +18,7 @@ class Activity(models.Model):
         (DOWN_VOTE, 'Down Vote'),
         )
 
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
     activity_type = models.CharField(max_length=1, choices=ACTIVITY_TYPES)
     date = models.DateTimeField(auto_now_add=True)
     feed = models.IntegerField(null=True, blank=True)
@@ -61,8 +60,8 @@ class Notification(models.Model):
     _EDITED_ARTICLE_TEMPLATE = '<a href="/{0}/">{1}</a> edited your article: <a href="/article/{2}/">{3}</a>'  # noqa: E501
     _ALSO_COMMENTED_TEMPLATE = '<a href="/{0}/">{1}</a> also commentend on the post: <a href="/feeds/{2}/">{3}</a>'  # noqa: E501
 
-    from_user = models.ForeignKey(User, related_name='+')
-    to_user = models.ForeignKey(User, related_name='+')
+    from_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='+')
+    to_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='+')
     date = models.DateTimeField(auto_now_add=True)
     feed = models.ForeignKey('feeds.Feed', null=True, blank=True)
     question = models.ForeignKey('questions.Question', null=True, blank=True)

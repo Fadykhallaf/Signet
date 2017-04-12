@@ -1,16 +1,16 @@
 from __future__ import unicode_literals
 
-from django.contrib.auth.models import User
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 
 import markdown
 from bootcamp.activities.models import Activity
+from bootcamp import settings
 
 
 @python_2_unicode_compatible
 class Question(models.Model):
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
     title = models.CharField(max_length=255)
     description = models.TextField(max_length=2000)
     create_date = models.DateTimeField(auto_now_add=True)
@@ -84,7 +84,7 @@ class Question(models.Model):
 
 @python_2_unicode_compatible
 class Answer(models.Model):
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
     question = models.ForeignKey(Question)
     description = models.TextField(max_length=2000)
     create_date = models.DateTimeField(auto_now_add=True)

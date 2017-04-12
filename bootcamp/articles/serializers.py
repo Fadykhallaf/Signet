@@ -1,9 +1,8 @@
-from .models import Article, ArticleComment, User
+from .models import Article, ArticleComment
 from rest_framework.serializers import ModelSerializer, URLField, RelatedField, SerializerMethodField
 
 
 class ArticleSerializer(ModelSerializer):
-    create_user = SerializerMethodField()
     comments = URLField(source='get_comments')
 
     class Meta:
@@ -19,9 +18,3 @@ class ArticleSerializer(ModelSerializer):
             'update_date',
             'update_user',
         ]
-
-        def get_create_user(self, obj):
-            return str(obj.user.username)
-
-        def __str__(self):
-            return self.user.username
