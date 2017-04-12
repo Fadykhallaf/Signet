@@ -273,8 +273,6 @@ class FeedDeleteAPIView(RetrieveDestroyAPIView):
         instance.delete()
 
 
-
-
 class FeedCreateAPIView(CreateAPIView):
     queryset = Feed.objects.all()
     serializer_class = FeedSerializer
