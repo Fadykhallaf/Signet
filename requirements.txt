@@ -12,3 +12,6 @@ psycopg2==2.6.2
 django-closuretree==1.1.10
 pyx
 djangorestframework
+djangorestframework-jwt
+django-filter
+

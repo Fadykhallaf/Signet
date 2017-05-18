@@ -4,6 +4,7 @@ from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
 from rest_framework_jwt.views import obtain_jwt_token
+from rest_framework_jwt.views import refresh_jwt_token
 
 from bootcamp.activities import views as activities_views
 from bootcamp.authentication import views as bootcamp_auth_views
@@ -20,6 +21,7 @@ urlpatterns = [
     url(r'^logout', auth_views.logout, {'next_page': '/'}, name='logout'),
     url(r'^signup/$', bootcamp_auth_views.signup, name='signup'),
     url(r'^api/auth/token', obtain_jwt_token),
+    url(r'^api/token/refresh/', refresh_jwt_token),
     url(r'^registerapi/$', bootcamp_auth_views.UserCreateAPIView.as_view(), name='register'),
     url(r'^user/profile/$', bootcamp_auth_views.ProfileListAPIView.as_view(), name='profile'),
     url(r'^settings/$', core_views.settings, name='settings'),

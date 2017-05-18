@@ -1,6 +1,8 @@
 from django.contrib.auth import get_user_model
 from django.db.models import Q
+from rest_framework.authtoken.models import Token
 from .models import Profile
+from rest_framework_jwt.views  import ObtainJSONWebToken
 from rest_framework.exceptions import ValidationError
 from rest_framework.serializers import (ModelSerializer,
                                         EmailField,
@@ -80,7 +82,7 @@ class UserLoginSerializer(ModelSerializer):
         if user_obj:
             if not user_obj.check_password(password):
                 raise ValidationError("Incorrect Credential please try again")
-        data["token"] = "SOME RANDOM TOKEN"
+        data["token"] = ObtainJSONWebToken()
         return data
 
 
@@ -95,3 +97,5 @@ class UserProfileSerializer(ModelSerializer):
             'job_title',
             'picture'
         ]
+
+

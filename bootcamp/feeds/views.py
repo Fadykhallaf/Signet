@@ -259,6 +259,7 @@ class FeedUpdateAPIView(RetrieveUpdateAPIView):
     queryset = Feed.objects.all()
     serializer_class = FeedEditSerializer
     permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+    # permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
